@@ -1,0 +1,6 @@
+1. Prettier         --> Untuk Merapikan Codingan JavaScript
+2. Icon Material    --> Untuk Icon2 Folder atau File
+3. ES7              --> Untuk Mempermudah Pengkodingan React JS
+4. Bracket Pair     --> Untuk memberi tanda Bracket
+5. Auto Rename Tag
+6. Auto Close Tag

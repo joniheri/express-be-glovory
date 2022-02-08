@@ -1,0 +1,8 @@
+##Before use sequelize, enter this sintak:
+~ npx sequelize init
+
+## Make migration/table to database
+~ npx sequelize-cli model:generate --name Tablename --attributes fieldnameOne:string,fieldId:integer,inputDate:dateonly
+
+## Make migrating table from folder migration to database
+~ npx sequelize-cli db:migrate
