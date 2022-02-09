@@ -35,7 +35,7 @@ exports.getUsers = async (req, res) => {
 // End Function GetUsers
 
 // Function GetUsersBelongsToAddress
-exports.getUsersBelongsToAddress = async (req, res) => {
+exports.getUsersHasManyAddress = async (req, res) => {
   try {
     // CheckDataFromMiddleware
     // const dataAutMiddleware = req.user;
@@ -97,24 +97,17 @@ exports.getUsersBelongsToAddress = async (req, res) => {
 };
 // End Function GetUsersBelongsToAddress
 
-// Function GetMusicById
-exports.getMusictById = async (req, res) => {
+// Function GetUserById
+exports.getUsertById = async (req, res) => {
   try {
     const { idParam } = req.params;
 
-    const getData = await Music.findOne({
+    const getData = await User.findOne({
       where: {
         id: idParam,
       },
       attributes: {
-        exclude: ["createdAt", "updatedAt", "artistId", "ArtistId"],
-      },
-      include: {
-        model: Artist,
-        as: "artist",
-        attributes: {
-          exclude: ["createdAt", "updatedAt"],
-        },
+        exclude: ["createdAt", "updatedAt"],
       },
     });
 
@@ -140,241 +133,15 @@ exports.getMusictById = async (req, res) => {
     });
   }
 };
-// End Function GetMusicById
+// End Function GetUserById
 
-// Function AddMusic
-exports.addMusic = async (req, res) => {
-  try {
-    const dataAdd = req.body; //Data will Added
-
-    // ChekcValidationInput
-    const schema = joi.object({
-      title: joi.string().min(1).required(),
-      year: joi.string().min(1).required(),
-      thumbnail: joi.string(),
-      attache: joi.string(),
-      artistId: joi.string().min(1).required(),
-    });
-    const { error } = schema.validate(dataAdd);
-    if (error) {
-      return res.send({
-        status: "Response Failed",
-        message: error.details[0].message,
-        data: dataAdd,
-      });
-    }
-    // EndChekcValidationInput
-
-    // AddData
-    const dataAdded = await Music.create(dataAdd);
-    if (!dataAdded) {
-      return res.send({
-        status: "Response Failed",
-        message: `Add data Failed!`,
-      });
-    }
-    // EndAddData
-
-    // GetDataById
-    const idMusic = dataAdded.id;
-    const getData = await Music.findOne({
-      where: {
-        id: idMusic,
-      },
-      attributes: {
-        exclude: ["createdAt", "updatedAt", "artistId", "ArtistId"],
-      },
-    });
-    if (getData == null) {
-      return res.send({
-        status: "Response Failed",
-        message: `Data with id ${idMusic} Not Found!`,
-        data: null,
-      });
-    }
-    // GetDataById
-
-    res.send({
-      statuss: "Response Success",
-      message: "Add data Success.",
-      dataAdded: getData,
-    });
-  } catch (error) {
-    return res.send({
-      status: "Response Failed",
-      message: "Add Data Error!",
-      error: error,
-    });
-  }
-};
-// End Function AddMusic
-
-// Function AddMusicWithFile
-exports.addMusicWithFile = async (req, res) => {
-  try {
-    const dataAdd = req.body; //Data will Added
-
-    // ChekcValidationInput
-    const schema = joi.object({
-      title: joi.string().min(1).required(),
-      year: joi.string().min(1).required(),
-      artistId: joi.string().min(1).required(),
-      thumbnail: joi.string().min(3),
-      attache: joi.string().min(3),
-    });
-    const { error } = schema.validate(dataAdd);
-    if (error) {
-      return res.send({
-        status: "Validate Failed",
-        message: error.details[0].message,
-        data: dataAdd,
-      });
-    }
-    // EndChekcValidationInput
-
-    // ModifValueDataInput
-    const thumbnail = req.files.imageFile[0].filename;
-    const attache = req.files.audioFile[0].filename;
-    const dataWithUpload = {
-      ...dataAdd,
-      thumbnail,
-      attache,
-    };
-    // console.log("dataWithUpload: ", dataWithUpload);
-    // ModifValueDataInput
-
-    // AddData
-    const dataAdded = await Music.create(dataWithUpload);
-    if (!dataAdded) {
-      return res.send({
-        status: "Response Failed",
-        message: `Add data Failed!`,
-      });
-    }
-    // EndAddData
-
-    // GetDataById;
-    const idMusic = dataAdded.id;
-    const getData = await Music.findOne({
-      where: {
-        id: idMusic,
-      },
-      attributes: {
-        exclude: ["createdAt", "updatedAt", "artistId", "ArtistId"],
-      },
-    });
-    if (getData == null) {
-      return res.send({
-        status: "Response Failed",
-        message: `Data with id ${idMusic} Not Found!`,
-        data: null,
-      });
-    }
-    // GetDataById
-
-    res.send({
-      status: "Response Success",
-      message: "Add data Success.",
-      dataAdded: getData,
-    });
-  } catch (error) {
-    return res.send({
-      status: "Response Failed",
-      message: `Add Data Error!  ${error}`,
-    });
-  }
-};
-// End Function AddMusicWithFile
-
-// Function UpdateMusic
-exports.updateMusic = async (req, res) => {
+// Function DeleteUser
+exports.deleteUser = async (req, res) => {
   try {
     const { idParam } = req.params;
 
     // CheckDataById
-    const getDataById = await Music.findOne({
-      where: {
-        id: idParam,
-      },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
-    });
-    if (getDataById == null) {
-      return res.send({
-        status: "Response Failed",
-        message: `Data with id ${idParam} Not Found!`,
-        data: null,
-      });
-    }
-    // EndCheckDataById
-
-    // UpdateData
-    const dataUpdate = req.body; //Data will updated
-    const dataUpdated = await Music.update(dataUpdate, {
-      where: {
-        id: idParam,
-      },
-    });
-    if (!dataUpdated) {
-      return res.send({
-        status: "Response Failed",
-        message: `Update Data Failed!`,
-        data: null,
-      });
-    }
-    // EndUpdateData
-
-    // getDataAfterUpdateById
-    const getDataAfterUpdateById = await Music.findOne({
-      where: {
-        id: idParam,
-      },
-      attributes: {
-        exclude: ["createdAt", "updatedAt"],
-      },
-      include: {
-        model: Artist,
-        as: "artist",
-        attributes: {
-          exclude: ["createdAt", "updatedAt"],
-        },
-      },
-    });
-    // getDataAfterUpdateById
-
-    if (getDataAfterUpdateById == null) {
-      return res.send({
-        status: "Response Failed",
-        message: `Data with id ${idParam} Not Found!`,
-        data: null,
-      });
-    }
-    // EndgetUserAfterUpdateById
-
-    res.send({
-      status: "Response Success",
-      message: "Update data Success.",
-      idParam: idParam,
-      dataUpdated: getDataAfterUpdateById,
-    });
-  } catch (error) {
-    return res.send({
-      status: "Response Failed",
-      message: "Update Error!",
-      error: error,
-    });
-  }
-};
-// End Function UpdateMusic
-
-// Function DeleteArtist
-exports.deleteMusic = async (req, res) => {
-  try {
-    const { idParam } = req.params;
-
-    // CheckDataById
-    const getDataById = await Music.findOne({
+    const getDataById = await User.findOne({
       where: {
         id: idParam,
       },

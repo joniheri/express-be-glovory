@@ -12,7 +12,7 @@ const {
 router.get("/todos", getTodos);
 router.get("/todo-by-id/:id", getTodoById);
 router.get("/todo-by-title/:title", getTodoByTitle);
-// EndTodosRouter
+// End TodosRouter
 
 // Auth
 const {
@@ -22,16 +22,30 @@ const {
 
 router.post("/register", authRegister);
 router.post("/login", authLogin);
-// EndAuth
+// End Auth
 
 // User
 const {
   getUsers,
-  getUsersBelongsToAddress,
+  getUsersHasManyAddress,
 } = require("../controllers/controllerExp/User");
 
 router.get("/users", getUsers);
-router.get("/users-address", getUsersBelongsToAddress);
-// EndUser
+router.get("/users-address", getUsersHasManyAddress);
+// End User
+
+// Address
+const {
+  getAddress,
+  getAddressBelongsToUser,
+  getAddressById,
+  addAddress,
+} = require("../controllers/controllerExp/Address");
+
+router.get("/address", getAddress);
+router.get("/address-user", getAddressBelongsToUser);
+router.get("/address-user-byid/:idParam", getAddressById);
+router.post("/add-address", addAddress);
+// En Address
 
 module.exports = router;
