@@ -40,7 +40,7 @@ exports.authRegister = async (req, res) => {
       return res.send({
         status: "Response Failed",
         message: `Email: ${data.email} already registered`,
-        dataFindEmail: findEmail,
+        // dataFindEmail: findEmail,
       });
     }
     // end check "email user" is exist
