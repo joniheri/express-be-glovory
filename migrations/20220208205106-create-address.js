@@ -9,15 +9,6 @@ module.exports = {
         type: Sequelize.INTEGER,
       },
       userId: {
-        type: Sequelize.STRING,
-      },
-      address: {
-        type: Sequelize.STRING,
-      },
-      city: {
-        type: Sequelize.STRING,
-      },
-      name: {
         type: Sequelize.INTEGER,
         allowNull: false,
         references: {
@@ -26,6 +17,12 @@ module.exports = {
         },
         onUpdate: "CASCADE",
         onDelete: "CASCADE",
+      },
+      address: {
+        type: Sequelize.STRING,
+      },
+      city: {
+        type: Sequelize.STRING,
       },
       createdAt: {
         allowNull: false,
